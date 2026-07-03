@@ -4,10 +4,10 @@ import React from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, LoaderCircle, Lock, Mail } from "lucide-react";
-import axios from "axios";
 
 import loginSchema from "@/schemas/loginSchema";
-import { useAuth }from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import toast from "react-hot-toast";
 
 const Page = () => {
 	const router = useRouter();
@@ -21,20 +21,25 @@ const Page = () => {
       password: "", //test@1234
     },
     validationSchema: loginSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setSubmitting }: any) => {
       try {
-        const response = await axios.post("/api/auth/login", values);
-        login(response.data.data);
+        await login(values.email, values.password);
         router.push("/home");
       } catch (error: any) {
         console.log(error);
+      } finally {
+        setSubmitting(false);
       }
     },
   });
 
+  const doSsoLogin = async () => {
+    toast.error("SSO login is not implemented yet.");
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-sm p-8 rounded-xl shadow-md" style={{ backgroundColor: "var(--app-bg)" }}>
+      <div className="w-full max-w-sm p-4 rounded-xl shadow-md" style={{ backgroundColor: "var(--app-bg)" }}>
         <h1 className="text-2xl font-bold text-center mb-6 uppercase" style={{ color: "var(--app-text)" }}>
           Sign In
         </h1>
@@ -106,6 +111,16 @@ const Page = () => {
             ) : (
               <>Login</>
             )}
+          </button>
+
+          <div className="uppercase text-center text-xs" style={{margin: '2px 0'}}>or</div>
+
+          <button
+            className="btn btn-outline btn-md btn-block"
+            type="button"
+            onClick={doSsoLogin}
+          >
+            SSO Login
           </button>
         </form>
       </div>

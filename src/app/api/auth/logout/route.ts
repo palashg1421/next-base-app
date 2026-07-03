@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { logoutService } from "@/services/auth.service";
+import { logoutService } from "@/services/authService";
 
 export async function POST() {
   try {

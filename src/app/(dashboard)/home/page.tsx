@@ -1,8 +1,10 @@
 'use client'
 
 import React from "react";
-import { useAuth } from "@/context/AuthContext";
+
 import Otp from "@/components/otp";
+
+import {useAuth} from "@/hooks/useAuth";
 
 const Page = () => {
   const {loading, user} = useAuth();

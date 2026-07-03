@@ -1,44 +1,75 @@
 "use client";
 
-import React from "react";
-import { AuthContext } from "@/context/AuthContext";
+import { useMemo, useState } from "react";
+import { AuthContext, User } from "@/contexts/AuthContext";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = React.useState<any | null>(null);
-  const [loading, setLoading] = React.useState(true);
-
-  // Restore auth on refresh
-  React.useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+  const [user, setUser] = useState<User | null>(() => {
+    try {
+      const stored = localStorage.getItem("user");
+      return stored ? (JSON.parse(stored) as User) : null;
+    } catch {
+      return null;
     }
-    setLoading(false);
-  }, []);
+  });
+  const [loading] = useState(false);
 
-  const login = (data: any) => {
-    const user = data;
-    setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
+  const login = async (email: string, password: string) => {
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      const userFromApi = data.data?.user ?? null;
+      const token = data.data?.token;
+
+      setUser(userFromApi);
+      try {
+        if (userFromApi) localStorage.setItem("user", JSON.stringify(userFromApi));
+        if (token) localStorage.setItem("access-token", token);
+      } catch {}
+
+      return;
+    } catch (err) {
+      throw err;
+    }
   };
 
-  const logout = () => {
+  const ssoLogin = async () => {
+    return Promise.resolve();
+  };
+
+  const logout = async () => {
     setUser(null);
-    localStorage.removeItem("user");
+    try {
+      localStorage.removeItem("user");
+      localStorage.removeItem("access-token");
+    } catch {}
+    return Promise.resolve();
   };
+
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      isAuthenticated: !!user,
+      login,
+      ssoLogin,
+      logout,
+    }),
+    [user, loading]
+  );
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        isAuthenticated: !!user,
-        login,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
   );
 };
 
