@@ -33,6 +33,7 @@ body {
 }
 
 /* buttons */
+button {cursor: pointer; transition: all 0.2s ease-in-out;}
 button:disabled {cursor: not-allowed; opacity: 0.5;}
 button:focus-within { @apply outline-none; }
 .btn {@apply cursor-pointer rounded-md uppercase font-medium transition-all;}

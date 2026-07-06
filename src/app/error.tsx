@@ -14,7 +14,7 @@ const Error = ({ error, reset }: Props) => {
 
   return (
     <div
-      className="min-h-screen bg-green-500 flex flex-col items-center justify-center"
+      className="min-h-screen flex flex-col items-center justify-center"
     >
       <h2 className='mb-2'>Now something seriously went wrong!</h2>
       <button className='btn btn-secondary btn-md' onClick={() => reset()}>
