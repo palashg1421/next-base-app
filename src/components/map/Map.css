@@ -1,0 +1,11 @@
+.currentLocationIndicator {width: 10px; height: 10px; border-radius: 50%; background: #2563eb; border:3px solid white; box-shadow:0 0 20px 15px rgba(37,99,235,.5);}
+.currentLocationIndicator .pulse {position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; transform: translate(-50%, -50%); border-radius: 50%; background: rgba(37, 99, 235, 0.35);animation: pulse 1.5s infinite;}
+@keyframes pulse {
+  from {transform: translate(-50%, -50%) scale(1);opacity: 0.8;}
+  to {transform: translate(-50%, -50%) scale(3);opacity: 0;}
+}
+.markerLabel {display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; width: max-content; position: relative; left: 50%; transform:translateX(-50%); background:#fff; color:#252525; padding:2px 6px; border:1px solid #dedede; border-radius:4px; box-shadow:1px 1px 3px rgba(0,0,0,.3); font-size:9px;}
+.badge {width: 12px; height: 12px; display: inline-block; border-radius: 50%;}
+.badge-healthy {background-color: #4caf50;}
+.badge-warning {background-color: #ff9800;}
+.badge-critical {background-color: #f44336;}
