@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Toaster } from "react-hot-toast";
+
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import AuthProvider from "@/providers/AuthProvider";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
-import AuthProvider from "@/providers/AuthProvider";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,6 +25,10 @@ export const metadata: Metadata = {
   authors: [{ name: "Palash G." }],
   creator: "Palash G.",
   publisher: "Palash G.",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#4285f4",
 };
 
 export default function RootLayout({

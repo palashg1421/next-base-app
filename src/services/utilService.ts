@@ -1,7 +1,10 @@
 export const validateCreditCardNumber = (cardNumber: string | number) => {
-  // test: 4012888888881881
-  // orig: 4375517833960000
-  console.log(cardNumber)
+  if (cardNumber.toString().length !== 16) {
+    return false;
+  }
+  const salted = [...cardNumber.toString()].map((digit, index) => (index % 2 === 0 ? Number(digit) * 2 : digit)).join("");
+  const sum = [...salted].reduce((acc, digit) => acc + Number(digit), 0);
+  return !(sum % 10);
 }
 
 export const stringToSlug = (str: string) => {
@@ -11,3 +14,7 @@ export const stringToSlug = (str: string) => {
     .trim()
     .replace(/\s+/g, "-");
 };
+
+export const sanatizeInput = (str: string) => {
+  return str.replace(/[^a-zA-Z0-9._-]/g, "");
+}

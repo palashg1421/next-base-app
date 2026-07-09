@@ -5,12 +5,24 @@ import { useMap } from "react-leaflet";
 import L from "leaflet";
 
 interface Props {
-  onLocate: () => void;
+  onLocate: (latlng: L.LatLng) => void;
 }
 
-const LocateControl = ({ onLocate }: Props) => {
+const LocationControl = ({ onLocate }: Props) => {
 
   const map = useMap();
+
+  useEffect(() => {
+    const handleLocationFound = (e: L.LocationEvent) => {
+      onLocate(e.latlng);
+    };
+
+    map.on("locationfound", handleLocationFound);
+
+    return () => {
+      map.off("locationfound", handleLocationFound);
+    };
+  }, [map, onLocate]);
 
   useEffect(() => {
     const LocateLeafletControl = L.Control.extend({
@@ -41,7 +53,11 @@ const LocateControl = ({ onLocate }: Props) => {
         L.DomEvent.disableScrollPropagation(container);
         L.DomEvent.on(button, "click", (e) => {
           L.DomEvent.preventDefault(e);
-          onLocate();
+          map.locate({
+            setView: true,
+            maxZoom: 16,
+            enableHighAccuracy: true,
+          });
         });
         return container;
       },
@@ -59,4 +75,4 @@ const LocateControl = ({ onLocate }: Props) => {
   return null;
 };
 
-export default LocateControl;
+export default LocationControl;

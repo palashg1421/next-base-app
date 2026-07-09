@@ -8,6 +8,7 @@ import { Eye, EyeOff, LoaderCircle, Lock, Mail } from "lucide-react";
 import loginSchema from "@/schemas/loginSchema";
 import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
+import { sanatizeInput } from "@/services/utilService";
 
 const Page = () => {
 	const router = useRouter();
@@ -21,14 +22,16 @@ const Page = () => {
       password: "", //test@1234
     },
     validationSchema: loginSchema,
-    onSubmit: async (values, { setSubmitting }: any) => {
+    onSubmit: async (values, { setSubmitting, resetForm }: any) => {
       try {
-        await login(values.email, values.password);
+        await login(values.email, sanatizeInput(values.password));
         router.push("/home");
       } catch (error: any) {
         console.log(error);
+        toast.error(error.message);
       } finally {
         setSubmitting(false);
+        resetForm();
       }
     },
   });
