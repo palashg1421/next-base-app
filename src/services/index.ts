@@ -4,6 +4,7 @@ import axios, {
   AxiosResponse,
 } from "axios";
 
+console.log(process.env.API_BASE_URL);
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.API_BASE_URL,
   withCredentials: true,

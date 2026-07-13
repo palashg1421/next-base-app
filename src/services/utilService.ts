@@ -15,6 +15,6 @@ export const stringToSlug = (str: string) => {
     .replace(/\s+/g, "-");
 };
 
-export const sanatizeInput = (str: string) => {
-  return str.replace(/[^a-zA-Z0-9._-]/g, "");
+export const removeScriptTag = (str: string) => {
+  return str.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
 }

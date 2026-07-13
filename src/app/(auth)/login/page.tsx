@@ -8,7 +8,7 @@ import { Eye, EyeOff, LoaderCircle, Lock, Mail } from "lucide-react";
 import loginSchema from "@/schemas/loginSchema";
 import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
-import { sanatizeInput } from "@/services/utilService";
+import { removeScriptTag } from "@/services/utilService";
 
 const Page = () => {
 	const router = useRouter();
@@ -18,17 +18,18 @@ const Page = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "", //jhen@mailinator.com
-      password: "", //test@1234
+      email: "jhen@mailinator.com", //jhen@mailinator.com
+      password: "test@1234", //test@1234
     },
     validationSchema: loginSchema,
     onSubmit: async (values, { setSubmitting, resetForm }: any) => {
       try {
-        await login(values.email, sanatizeInput(values.password));
-        router.push("/home");
+        const loginSucceeded = await login(values.email, removeScriptTag(values.password));
+        if (loginSucceeded) {
+          router.push("/home");
+        }
       } catch (error: any) {
-        console.log(error);
-        toast.error(error.message);
+        toast.error(error.message || "Login failed");
       } finally {
         setSubmitting(false);
         resetForm();

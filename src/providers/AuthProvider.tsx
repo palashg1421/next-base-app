@@ -24,8 +24,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || "Login failed");
+      if (data && data.error !== 0) {
+        setUser(null);
+        try {
+          localStorage.removeItem("user");
+          localStorage.removeItem("access-token");
+        } catch {}
+
+        throw new Error(data?.message || "Login failed");
       }
 
       const userFromApi = data.data?.user ?? null;
@@ -37,7 +43,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (token) localStorage.setItem("access-token", token);
       } catch {}
 
-      return;
+      return true;
     } catch (err) {
       throw err;
     }

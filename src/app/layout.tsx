@@ -8,6 +8,7 @@ import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
+import { SocketProvider } from "@/providers/SocketProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,7 +47,9 @@ export default function RootLayout({
         <AuthProvider>
           <ThemeProvider>
             <ReactQueryProvider>
-              {children}
+              <SocketProvider>
+                {children}
+              </SocketProvider>
             </ReactQueryProvider>
           </ThemeProvider>
         </AuthProvider>
