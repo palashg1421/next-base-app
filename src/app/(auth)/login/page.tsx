@@ -18,8 +18,8 @@ const Page = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "jhen@mailinator.com", //jhen@mailinator.com
-      password: "test@1234", //test@1234
+      email: "", //jhen@mailinator.com
+      password: "", //test@1234
     },
     validationSchema: loginSchema,
     onSubmit: async (values, { setSubmitting, resetForm }: any) => {
